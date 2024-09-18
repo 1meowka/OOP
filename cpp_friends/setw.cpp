@@ -12,3 +12,7 @@ int main ()
   cout << setw (10) << eight <<endl;
   return 0;
 }
+
+
+//Command for c++:               g++ friends -o different_name
+//                               ./different_name
