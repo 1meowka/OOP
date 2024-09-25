@@ -7,19 +7,21 @@
 using namespace std;
 
 // Структура для хранения информации о друге
-struct Friend {
-    string lastName;     // Фамилия
-    string firstName;    // Имя
-    string middleName;   // Отчество
-    int day;             // День рождения
-    int month;           // Месяц рождения
-    int year;            // Год рождения
-    string address;      // Адрес
-    string phone;        // Телефон
+struct Friend 
+{
+    string lastName;     
+    string firstName;    
+    string middleName;   
+    int day;             
+    int month;          
+    int year;            
+    string address;      
+    string phone;      
 };
 
 // Функция для ввода данных о друге
-void inputFriend(Friend &f) {
+void inputFriend(Friend &f) 
+{
     cout << "Введите данные о друге:\n";
     cout << "  Фамилия: ";
     getline(cin, f.lastName);
@@ -42,7 +44,7 @@ void inputFriend(Friend &f) {
 
 // Функция для печати информации о друге
 void printFriend(const Friend &f) {
-    cout << setw(10) << f.lastName << " " << setw(10) << f.firstName << " " << setw(10) << f.middleName 
+    cout << setw(10) << f.lastName << " | " << setw(10) << f.firstName << " | " << setw(10) << f.middleName 
          << " | " << setw(2) << f.day << "." << setw(2) << f.month << "." << f.year 
          << " | " << setw(15) << f.address << " | " << f.phone << endl;
 }
@@ -50,11 +52,11 @@ void printFriend(const Friend &f) {
 // Функция для печати всех друзей
 void printAllFriends(const vector<Friend> &friends) {
     if (friends.empty()) {
-        cout << "[INFO] Список друзей пуст.\n";
+        cout << "[INFORMATION] --- Список друзей пуст.\n";
         return;
     }
     
-    cout << left << setw(10) << "Фамилия" << setw(10) << "Имя" << setw(10) << "Отчество"
+    cout << left << setw(10) << "Фамилия" << setw(10) << " | Имя" << setw(10) << " | Отчество"
          << " | Дата рождения | " << setw(15) << "Адрес" << " | Телефон" << endl;
     cout << string(80, '-') << endl;
     for (const auto &f : friends) {
@@ -63,7 +65,8 @@ void printAllFriends(const vector<Friend> &friends) {
 }
 
 // Функция для поиска и вывода друзей, родившихся в заданном месяце
-void findFriendsByMonth(const vector<Friend> &friends, int month) {
+void findFriendsByMonth(const vector<Friend> &friends, int month) 
+{
     bool found = false;
     cout << "Друзья, родившиеся в месяце " << month << ":\n";
     for (const auto &f : friends) {
@@ -73,7 +76,7 @@ void findFriendsByMonth(const vector<Friend> &friends, int month) {
         }
     }
     if (!found) {
-        cout << "[INFO] Нет друзей, родившихся в этом месяце.\n";
+        cout << "[INFORMATION] --- Нет друзей, родившихся в этом месяце.\n";
     }
 }
 
@@ -84,17 +87,17 @@ void removeFriend(vector<Friend> &friends, int index) {
         return;
     }
     friends.erase(friends.begin() + index);
-    cout << "[INFO] Друг удалён.\n";
+    cout << "[INFORMATION] --- Друг удалён.\n";
 }
 
-// Печать меню
+// Печатаем менюшку
 void printMenu() {
     cout << "[1] Добавить друга\n";
     cout << "[2] Удалить друга\n";
     cout << "[3] Показать всех друзей\n";
     cout << "[4] Найти друзей по месяцу рождения\n";
     cout << "[0] Выйти\n";
-    cout << " -> ";
+    cout << " Введите-> ";
 }
 
 int main() {
@@ -111,12 +114,12 @@ int main() {
                 Friend newFriend;
                 inputFriend(newFriend);
                 friends.push_back(newFriend);
-                cout << "[INFO] Друг добавлен.\n";
+                cout << "[INFORMATION] --- Друг добавлен.\n";
                 break;
             }
             case 2: {  // Удалить друга
                 if (friends.empty()) {
-                    cout << "[INFO] Список друзей пуст.\n";
+                    cout << "[INFORMATION] --- Список друзей пуст.\n";
                 } else {
                     int index;
                     cout << "Введите номер друга для удаления (1 - " << friends.size() << "): ";
@@ -131,7 +134,7 @@ int main() {
             }
             case 4: {  // Найти друзей по месяцу рождения
                 if (friends.empty()) {
-                    cout << "[INFO] Список друзей пуст.\n";
+                    cout << "[INFORMATION] --- Список друзей пуст.\n";
                 } else {
                     int month;
                     cout << "Введите месяц (1-12): ";
@@ -141,12 +144,14 @@ int main() {
                 break;
             }
             case 0:
-                cout << "[INFO] Программа завершена.\n";
+                cout << "[INFORMATION] --- Программа завершена.\n";
                 break;
             default:
                 cout << "[ERROR] Неверная команда.\n";
         }
     } while (command != 0);
-    
     return 0;
 }
+
+//Command for c++:               g++ friends.cpp -o different_name
+//                               ./different_name
