@@ -1,22 +1,22 @@
 #include <iostream>
-#include <vector>
+#include <list>
 #include <string>
 #include <sstream>
 #include <iomanip>
 
 using namespace std;
 
-// Структура для хранения информации о друге
+// Структура для хранения данных о друге
 struct Friend 
 {
     string lastName;     
     string firstName;    
     string middleName;   
     int day;             
-    int month;          
+    int month;           
     int year;            
     string address;      
-    string phone;      
+    string phone;       
 };
 
 // Функция для ввода данных о друге
@@ -50,12 +50,12 @@ void printFriend(const Friend &f) {
 }
 
 // Функция для печати всех друзей
-void printAllFriends(const vector<Friend> &friends) {
-    if (friends.empty()) {
+void printAllFriends(const list<Friend> &friends) {
+    if (friends.empty()) { // Проверка является ли строка пустой
         cout << "[INFORMATION] --- Список друзей пуст.\n";
         return;
     }
-    
+    // Задаем ширину для ввода строк
     cout << left << setw(10) << "Фамилия" << setw(10) << " | Имя" << setw(10) << " | Отчество"
          << " | Дата рождения | " << setw(15) << "Адрес" << " | Телефон" << endl;
     cout << string(80, '-') << endl;
@@ -65,7 +65,7 @@ void printAllFriends(const vector<Friend> &friends) {
 }
 
 // Функция для поиска и вывода друзей, родившихся в заданном месяце
-void findFriendsByMonth(const vector<Friend> &friends, int month) 
+void findFriendsByMonth(const list<Friend> &friends, int month) 
 {
     bool found = false;
     cout << "Друзья, родившиеся в месяце " << month << ":\n";
@@ -76,18 +76,20 @@ void findFriendsByMonth(const vector<Friend> &friends, int month)
         }
     }
     if (!found) {
-        cout << "[INFORMATION] --- Нет друзей, родившихся в этом месяце.\n";
+        cout << "[INFORMATION] --- Нет друзей, которые родились в этом месяце.\n";
     }
 }
 
 // Функция для удаления друга по индексу
-void removeFriend(vector<Friend> &friends, int index) {
+void removeFriend(list<Friend> &friends, int index) {
     if (index < 0 || index >= friends.size()) {
         cout << "[ERROR] Неверный индекс.\n";
         return;
     }
-    friends.erase(friends.begin() + index);
-    cout << "[INFORMATION] --- Друг удалён.\n";
+    auto id = friends.begin();
+    advance(id, index);  // Переходим на нужный индекс
+    friends.erase(id);
+    cout << "[INFORMATION] --- Друг удалён:(\n";
 }
 
 // Печатаем менюшку
@@ -101,7 +103,7 @@ void printMenu() {
 }
 
 int main() {
-    vector<Friend> friends;
+    list<Friend> friends;
     int command;
     
     do {
@@ -113,8 +115,8 @@ int main() {
             case 1: {  // Добавить друга
                 Friend newFriend;
                 inputFriend(newFriend);
-                friends.push_back(newFriend);
-                cout << "[INFORMATION] --- Друг добавлен.\n";
+                friends.push_back(newFriend); //добавление друга в конец списка, обычно с векторами вроде используются(??)
+                cout << "[INFORMATION] --- Друг добавлен:)\n";
                 break;
             }
             case 2: {  // Удалить друга
@@ -143,15 +145,17 @@ int main() {
                 }
                 break;
             }
-            case 0:
+            case 0: //Выход из программы
                 cout << "[INFORMATION] --- Программа завершена.\n";
                 break;
             default:
-                cout << "[ERROR] Неверная команда.\n";
+                cout << "[ERROR] Нет такой команды! Введите корректную символов.\n";
         }
     } while (command != 0);
     return 0;
 }
 
-//Command for c++:               g++ friends.cpp -o different_name
-//                               ./different_name
+
+
+//Команда для запуска проги:        g++ different_name -0 name
+//                                  ./name
