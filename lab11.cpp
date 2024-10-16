@@ -1,8 +1,6 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <vector>
-#include <algorithm> // Необходимо для std::max
 
 using namespace std;
 
@@ -47,25 +45,7 @@ void delete_friend(int index) {
     }
 }
 
-// Функция разбивает строку на подстроки фиксированной длины
-vector<string> split_string(const string& str, int width) {
-    vector<string> result;
-    for (size_t i = 0; i < str.size(); i += width) {
-        result.push_back(str.substr(i, width));
-    }
-    return result;
-}
-
-// Функция для вывода содержимого с переносом строк
-void print_with_wrap(const string& text, int width) {
-    vector<string> lines = split_string(text, width);
-    for (const auto& line : lines) {
-        cout << setw(width) << left << line;
-    }
-}
-
-// Изменённая функция для печати таблицы друзей
-// Изменённая функция для печати таблицы друзей
+// Функция для печати таблицы друзей
 void print_friends() {
     if (get_friend_count() == 0) {
         cout << "Список друзей пуст.\n";
@@ -82,71 +62,49 @@ void print_friends() {
     cout << string(100, '-') << endl;
 
     for (int i = 0; i < get_friend_count(); ++i) {
-        vector<string> lastNameLines = split_string(friends[i].lastName, COLUMN_WIDTH);
-        vector<string> firstNameLines = split_string(friends[i].firstName, COLUMN_WIDTH);
-        vector<string> middleNameLines = split_string(friends[i].middleName, COLUMN_WIDTH);
-        vector<string> addressLines = split_string(friends[i].address, COLUMN_WIDTH);
-        vector<string> phoneLines = split_string(friends[i].phone, COLUMN_WIDTH);
+        cout << "| " << setw(COLUMN_WIDTH) << left << friends[i].lastName
+             << "| " << setw(COLUMN_WIDTH) << left << friends[i].firstName
+             << "| " << setw(COLUMN_WIDTH) << left << friends[i].middleName
+             << "| " << setw(COLUMN_WIDTH) << left << friends[i].day << "."
+             << (friends[i].month < 10 ? "0" : "") << friends[i].month << "." << friends[i].year
+             << "| " << setw(COLUMN_WIDTH) << left << friends[i].address
+             << "| " << setw(COLUMN_WIDTH) << left << friends[i].phone << " |" << endl;
+        cout << string(100, '-') << endl;
+    }
+}
 
-        // Определим максимальное количество строк для данного друга
-        int max_lines = max({lastNameLines.size(), firstNameLines.size(), middleNameLines.size(), addressLines.size(), phoneLines.size()});
+// Функция для поиска друзей по месяцу рождения
+void find_friends_by_month(int month) {
+    bool found = false;
 
-        for (int line = 0; line < max_lines; ++line) {
-            cout << "| ";
-
-            if (line < lastNameLines.size()) {
-                cout << setw(COLUMN_WIDTH) << left << lastNameLines[line];
-            } else {
-                cout << setw(COLUMN_WIDTH) << " ";
+    // Заголовок таблицы (выводим только если есть совпадения)
+    for (int i = 0; i < get_friend_count(); ++i) {
+        if (friends[i].month == month) {
+            if (!found) {
+                cout << "| " << setw(COLUMN_WIDTH) << left << "fam"
+                     << "| " << setw(COLUMN_WIDTH) << left << "name"
+                     << "| " << setw(COLUMN_WIDTH) << left << "middlename"
+                     << "| " << setw(COLUMN_WIDTH) << left << "bithday"
+                     << "| " << setw(COLUMN_WIDTH) << left << "sity"
+                     << "| " << setw(COLUMN_WIDTH) << left << "number" << " |" << endl;
+                cout << string(100, '-') << endl;
+                found = true;
             }
 
-            cout << "| ";
-
-            if (line < firstNameLines.size()) {
-                cout << setw(COLUMN_WIDTH) << left << firstNameLines[line];
-            } else {
-                cout << setw(COLUMN_WIDTH) << " ";
-            }
-
-            cout << "| ";
-
-            if (line < middleNameLines.size()) {
-                cout << setw(COLUMN_WIDTH) << left << middleNameLines[line];
-            } else {
-                cout << setw(COLUMN_WIDTH) << " ";
-            }
-
-            cout << "| ";
-            if (line == 0) {
-                // Форматируем дату рождения строго в пределах колонки
-                string birth_date = to_string(friends[i].day) + "." + 
-                                    (friends[i].month < 10 ? "0" : "") + to_string(friends[i].month) + "." + 
-                                    to_string(friends[i].year);
-                cout << setw(COLUMN_WIDTH) << left << birth_date;
-            } else {
-                cout << setw(COLUMN_WIDTH) << " "; // Пустое место для остальных строк
-            }
-
-            cout << "| ";
-
-            if (line < addressLines.size()) {
-                cout << setw(COLUMN_WIDTH) << left << addressLines[line];
-            } else {
-                cout << setw(COLUMN_WIDTH) << " ";
-            }
-
-            cout << "| ";
-
-            if (line < phoneLines.size()) {
-                cout << setw(COLUMN_WIDTH) << left << phoneLines[line];
-            } else {
-                cout << setw(COLUMN_WIDTH) << " ";
-            }
-
-            cout << " |" << endl;
+            // Выводим только тех друзей, у кого месяц рождения совпадает
+            cout << "| " << setw(COLUMN_WIDTH) << left << friends[i].lastName
+                 << "| " << setw(COLUMN_WIDTH) << left << friends[i].firstName
+                 << "| " << setw(COLUMN_WIDTH) << left << friends[i].middleName
+                 << "| " << setw(COLUMN_WIDTH) << left << friends[i].day << "."
+                 << (friends[i].month < 10 ? "0" : "") << friends[i].month << "." << friends[i].year
+                 << "| " << setw(COLUMN_WIDTH) << left << friends[i].address
+                 << "| " << setw(COLUMN_WIDTH) << left << friends[i].phone << " |" << endl;
+            cout << string(100, '-') << endl;
         }
+    }
 
-        cout << string(100, '-') << endl; // Разделительная линия
+    if (!found) {
+        cout << "Друзей с месяцем рождения " << month << " не найдено.\n";
     }
 }
 
@@ -197,7 +155,7 @@ int main() {
             int month;
             cout << "Введите месяц (1-12): ";
             cin >> month;
-            // Здесь должна быть функция для вывода по месяцу, если нужно
+            find_friends_by_month(month);
         } else if (choice == 5) {
             break;
         } else {
